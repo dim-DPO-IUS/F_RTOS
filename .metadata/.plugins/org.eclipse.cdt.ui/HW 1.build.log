@@ -1,0 +1,17 @@
+20:24:40 **** Incremental Build of configuration Debug for project HW 1 ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "HW 1.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/HW 1/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="HW 1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: HW 1.elf
+ 
+arm-none-eabi-size  HW\ 1.elf 
+arm-none-eabi-objdump -h -S HW\ 1.elf  > "HW 1.list"
+   text	   data	    bss	    dec	    hex	filename
+  17068	     96	  18344	  35508	   8ab4	HW 1.elf
+Finished building: default.size.stdout
+ 
+Finished building: HW 1.list
+ 
+
+20:24:40 Build Finished. 0 errors, 0 warnings. (took 433ms)
+
