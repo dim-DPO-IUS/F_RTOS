@@ -22,7 +22,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
+#include <stdio.h>
+#include <ctype.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +47,11 @@ UART_HandleTypeDef huart2;
 
 osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
+uint8_t in_state[4]  = {0};
+uint8_t out_state[4] = {0};
 
+/* Маска поведения (пока просто храним 4 символа '0'/'1') */
+char logic_mask[5] = "0000";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,12 +61,39 @@ static void MX_USART2_UART_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
-
+static void ReadInputs(void);
+static void ApplyLogic(void);
+static void WriteOutputs(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void ReadInputs(void)
+{
+  /* При Pull-up: отпущена = 1, нажата = 0 (если кнопка на GND) */
+  in_state[0] = (uint8_t)HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin);
+  in_state[1] = (uint8_t)HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin);
+  in_state[2] = (uint8_t)HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin);
+  in_state[3] = (uint8_t)HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin);
+}
 
+static void ApplyLogic(void)
+{
+  /* Базовая логика из задания */
+  out_state[0] = (uint8_t)(in_state[0] && in_state[3]); /* OUT1 = IN1 && IN4 */
+  out_state[1] = in_state[1];                           /* OUT2 = IN2 */
+
+  /* OUT3/OUT4 пока оставим как есть (0 по умолчанию) */
+  /* Позже добавим управление через команды/маску */
+}
+
+static void WriteOutputs(void)
+{
+  HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, out_state[0] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, out_state[1] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, out_state[2] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, out_state[3] ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
 /* USER CODE END 0 */
 
 /**
@@ -289,7 +322,11 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	  ReadInputs();
+	  ApplyLogic();
+	  WriteOutputs();
+
+	  osDelay(20);
   }
   /* USER CODE END 5 */
 }
