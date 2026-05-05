@@ -1745,3 +1745,90 @@
 2026-05-05 22:00:16,404 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 426mS.
 2026-05-05 22:00:16,404 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
 2026-05-05 22:00:16,406 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2026-05-05 22:15:07,120 [ERROR] RtosPanel:558 - Can not restore the selected Tab for FREERTOS(A reason can be that the tab is no more available.)
+2026-05-05 22:15:14,850 [ERROR] RtosPanel:558 - Can not restore the selected Tab for FREERTOS(A reason can be that the tab is no more available.)
+2026-05-05 22:15:18,441 [ERROR] RtosPanel:558 - Can not restore the selected Tab for FREERTOS(A reason can be that the tab is no more available.)
+2026-05-05 22:15:22,025 [ERROR] RtosPanel:558 - Can not restore the selected Tab for FREERTOS(A reason can be that the tab is no more available.)
+2026-05-05 22:15:47,993 [INFO] Gpio:278 - dependency for GPIO []
+2026-05-05 22:17:21,831 [INFO] Pin:2347 - value.trim() Ш
+2026-05-05 22:17:21,832 [INFO] Pin:2348 - Pin value PC0
+2026-05-05 22:18:52,517 [INFO] Gpio:278 - dependency for GPIO []
+2026-05-05 22:18:52,565 [INFO] NvicIntPanel:101 - NVIC parent = com.st.microxplorer.plugins.ip.nvic.MultiNvicIntPanel[,0,0,0x0,invalid,layout=javax.swing.BoxLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2026-05-05 22:18:56,735 [INFO] Gpio:278 - dependency for GPIO []
+2026-05-05 22:18:56,773 [INFO] NvicIntPanel:101 - NVIC parent = com.st.microxplorer.plugins.ip.nvic.MultiNvicIntPanel[,0,0,0x0,invalid,layout=javax.swing.BoxLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2026-05-05 22:19:01,119 [INFO] Gpio:278 - dependency for GPIO []
+2026-05-05 22:19:01,151 [INFO] NvicIntPanel:101 - NVIC parent = com.st.microxplorer.plugins.ip.nvic.MultiNvicIntPanel[,0,0,0x0,invalid,layout=javax.swing.BoxLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2026-05-05 22:19:04,383 [INFO] Gpio:278 - dependency for GPIO []
+2026-05-05 22:19:04,411 [INFO] NvicIntPanel:101 - NVIC parent = com.st.microxplorer.plugins.ip.nvic.MultiNvicIntPanel[,0,0,0x0,invalid,layout=javax.swing.BoxLayout,alignmentX=0.0,alignmentY=0.0,border=,flags=9,maximumSize=,minimumSize=,preferredSize=]
+2026-05-05 22:21:26,671 [INFO] Gpio:278 - dependency for GPIO []
+2026-05-05 22:22:21,810 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 561843808 Bytes (933232640)
+2026-05-05 22:22:21,987 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 577572448 Bytes (933232640)
+2026-05-05 22:22:22,563 [INFO] UtilMem:75 - End SaveConfig() Used Memory: 614272608 Bytes (933232640)
+2026-05-05 22:22:22,852 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: NVIC
+2026-05-05 22:22:22,854 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: FREERTOS
+2026-05-05 22:22:22,854 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: USART
+2026-05-05 22:22:22,855 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: SYS
+2026-05-05 22:22:22,856 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: GPIO
+2026-05-05 22:22:22,856 [INFO] BlockDiagram:2775 - set Specific Code input for plugin: RCC
+2026-05-05 22:22:22,856 [INFO] CodeGenerator:892 - code generatio: config db path: /home/dim0k/st/stm32cubeide_1.19.0/plugins/com.st.stm32cube.common.mx_6.15.0.202507011659//db/
+2026-05-05 22:22:22,955 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/license.tmp_save
+2026-05-05 22:22:23,141 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/license.tmp
+2026-05-05 22:22:23,171 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/gpio.tmp_save
+2026-05-05 22:22:23,251 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/gpio.tmp
+2026-05-05 22:22:23,520 [INFO] Middleware:1452 - No code input for Bsp Dependency
+2026-05-05 22:22:23,526 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_inc.tmp_save
+2026-05-05 22:22:23,597 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_inc.tmp
+2026-05-05 22:22:23,599 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_vars.tmp_save
+2026-05-05 22:22:23,670 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_vars.tmp
+2026-05-05 22:22:23,673 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_pfp.tmp_save
+2026-05-05 22:22:23,729 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_pfp.tmp
+2026-05-05 22:22:23,731 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_obj_creat.tmp_save
+2026-05-05 22:22:23,772 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_obj_creat.tmp
+2026-05-05 22:22:23,773 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_kernelStart.tmp_save
+2026-05-05 22:22:23,812 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_kernelStart.tmp
+2026-05-05 22:22:23,813 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_default_thread.tmp_save
+2026-05-05 22:22:23,851 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_default_thread.tmp
+2026-05-05 22:22:23,852 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_threads.tmp_save
+2026-05-05 22:22:23,890 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_threads.tmp
+2026-05-05 22:22:23,895 [INFO] Middleware:1452 - No code input for Bsp Dependency
+2026-05-05 22:22:23,898 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_inc.tmp_save
+2026-05-05 22:22:23,936 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_inc.tmp
+2026-05-05 22:22:23,938 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_vars.tmp_save
+2026-05-05 22:22:23,977 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_vars.tmp
+2026-05-05 22:22:23,979 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_pfp.tmp_save
+2026-05-05 22:22:24,024 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_pfp.tmp
+2026-05-05 22:22:24,025 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_obj_creat.tmp_save
+2026-05-05 22:22:24,069 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_obj_creat.tmp
+2026-05-05 22:22:24,071 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_kernelStart.tmp_save
+2026-05-05 22:22:24,111 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_kernelStart.tmp
+2026-05-05 22:22:24,113 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_default_thread.tmp_save
+2026-05-05 22:22:24,153 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_default_thread.tmp
+2026-05-05 22:22:24,155 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_threads.tmp_save
+2026-05-05 22:22:24,199 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/rtos_threads.tmp
+2026-05-05 22:22:24,200 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/FreeRTOSConfig.h_save
+2026-05-05 22:22:24,260 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/FreeRTOSConfig.h
+2026-05-05 22:22:24,262 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/freertos.c_save
+2026-05-05 22:22:24,322 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/freertos.c
+2026-05-05 22:22:24,327 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/stm32f4xx_it.c_save
+2026-05-05 22:22:24,431 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/stm32f4xx_it.c
+2026-05-05 22:22:24,433 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/stm32f4xx_it.h_save
+2026-05-05 22:22:24,471 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/stm32f4xx_it.h
+2026-05-05 22:22:24,476 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/stm32f4xx_hal_msp.c_save
+2026-05-05 22:22:24,547 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/stm32f4xx_hal_msp.c
+2026-05-05 22:22:24,549 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/system.tmp_save
+2026-05-05 22:22:24,587 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/MXTmpFiles/system.tmp
+2026-05-05 22:22:24,589 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/stm32f4xx_hal_timebase_tim.c_save
+2026-05-05 22:22:24,629 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/stm32f4xx_hal_timebase_tim.c
+2026-05-05 22:22:24,632 [INFO] CodeEngine:321 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/stm32f4xx_hal_conf.h_save
+2026-05-05 22:22:24,678 [INFO] CodeEngine:345 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/stm32f4xx_hal_conf.h
+2026-05-05 22:22:24,692 [INFO] ApiDbMcu:532 - Load IP Config File for USART2
+2026-05-05 22:22:24,697 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/main.h_save
+2026-05-05 22:22:24,757 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Inc/main.h
+2026-05-05 22:22:24,760 [INFO] CodeEngine:265 - oldGeneratedFile, /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/main.c_save
+2026-05-05 22:22:24,829 [INFO] CodeEngine:289 - Generated code: /mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/Core/Src/main.c
+2026-05-05 22:22:25,048 [INFO] ProjectBuilder:3606 - Time for Copy HAL[1] : 75mS.
+2026-05-05 22:22:25,050 [INFO] ProjectBuilder:5216 - Project Generator version: 4.7.0-B52
+2026-05-05 22:22:25,112 [INFO] ConfigFileManager:1595 - The Die is : DIE431
+2026-05-05 22:22:25,768 [INFO] ProjectBuilder:5496 - Time for Generating toolchain IDE Files: 717mS.
+2026-05-05 22:22:25,768 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
+2026-05-05 22:22:25,772 [INFO] ProjectBuilder:3463 - Time for Copy CMSIS : 0mS.
