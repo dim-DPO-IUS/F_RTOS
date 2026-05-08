@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include "event_groups.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -34,7 +35,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+  #define EVT_INPUT_CHANGED (1U << 0)
+  #define EVT_MASK_CHANGED  (1U << 1)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -46,12 +48,22 @@
 UART_HandleTypeDef huart1;
 
 osThreadId defaultTaskHandle;
+osThreadId uartTaskHandle;
+osThreadId inputTaskHandle;
+
 /* USER CODE BEGIN PV */
 uint8_t in_state[4]  = {0};
 uint8_t out_state[4] = {0};
 
 /* Маска поведения (пока просто храним 4 символа '0'/'1') */
 char logic_mask[5] = "0000";
+volatile uint8_t mask_bits = 0x00;   /* старт из "0000" */
+
+volatile uint8_t in_bits   = 0;
+volatile uint8_t out_bits  = 0;
+
+EventGroupHandle_t ctrlEventGroup;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,6 +71,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void const * argument);
+void StartUartTask(void const * argument);
+void StartInputTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 static void ReadInputs(void);
@@ -68,9 +82,12 @@ static void WriteOutputs(void);
 static void UartSend(const char *s);
 static void ProcessCommand(char *cmd);
 static void PollUartCommand(void);
+
+static uint8_t PackInputBits(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
+
 /* USER CODE BEGIN 0 */
 static void ReadInputs(void)
 {
@@ -83,12 +100,24 @@ static void ReadInputs(void)
 
 static void ApplyLogic(void)
 {
-  /* Базовая логика из задания */
-  out_state[0] = (uint8_t)(in_state[0] && in_state[3]); /* OUT1 = IN1 && IN4 */
-  out_state[1] = in_state[1];                           /* OUT2 = IN2 */
+  uint8_t logic_bits = 0;
 
-  /* OUT3/OUT4 пока оставим как есть (0 по умолчанию) */
-  /* Позже добавим управление через команды/маску */
+  /* OUT1 = IN1 && IN4 */
+  if ((in_bits & 0x01U) && (in_bits & 0x08U))
+    logic_bits |= 0x01U;
+
+  /* OUT2 = IN2 */
+  if (in_bits & 0x02U)
+    logic_bits |= 0x02U;
+
+  /* OUT3/OUT4 пока без логики => 0 */
+
+  out_bits = (uint8_t)(logic_bits & mask_bits);
+
+  out_state[0] = (out_bits & 0x01U) ? 1U : 0U;
+  out_state[1] = (out_bits & 0x02U) ? 1U : 0U;
+  out_state[2] = (out_bits & 0x04U) ? 1U : 0U;
+  out_state[3] = (out_bits & 0x08U) ? 1U : 0U;
 }
 
 static void WriteOutputs(void)
@@ -122,42 +151,16 @@ static void ProcessCommand(char *cmd)
   /* 1) In? */
   if (strcmp(cmd, "In?") == 0)
   {
-    ReadInputs();
     snprintf(resp, sizeof(resp), "IN: %d%d%d%d\r\n",
-             in_state[0], in_state[1], in_state[2], in_state[3]);
+             (in_bits & 0x01U) ? 1 : 0,
+             (in_bits & 0x02U) ? 1 : 0,
+             (in_bits & 0x04U) ? 1 : 0,
+             (in_bits & 0x08U) ? 1 : 0);
     UartSend(resp);
     return;
   }
 
-  /* 2) Out N on/off */
-  {
-    int ch = 0;
-    char state[8] = {0};
-    if (sscanf(cmd, "Out %d %7s", &ch, state) == 2)
-    {
-      if (ch >= 1 && ch <= 4)
-      {
-        if (strcmp(state, "on") == 0)
-        {
-          out_state[ch - 1] = 1;
-          WriteOutputs();
-          snprintf(resp, sizeof(resp), "OK: OUT%d=ON\r\n", ch);
-          UartSend(resp);
-          return;
-        }
-        else if (strcmp(state, "off") == 0)
-        {
-          out_state[ch - 1] = 0;
-          WriteOutputs();
-          snprintf(resp, sizeof(resp), "OK: OUT%d=OFF\r\n", ch);
-          UartSend(resp);
-          return;
-        }
-      }
-      UartSend("ERR: use Out 1..4 on/off\r\n");
-      return;
-    }
-  }
+
 
   /* 3) Mask XXXX (X только 0/1, длина 4) */
   {
@@ -172,6 +175,15 @@ static void ProcessCommand(char *cmd)
       {
         memcpy(logic_mask, m, 4);
         logic_mask[4] = '\0';
+
+        mask_bits = (uint8_t)((logic_mask[0] == '1' ? 1U : 0U) |
+                              ((logic_mask[1] == '1' ? 1U : 0U) << 1) |
+                              ((logic_mask[2] == '1' ? 1U : 0U) << 2) |
+                              ((logic_mask[3] == '1' ? 1U : 0U) << 3));
+
+        xEventGroupSetBits(ctrlEventGroup, (1U << 1)); /* EVT_MASK_CHANGED */
+
+
         snprintf(resp, sizeof(resp), "OK: MASK=%s\r\n", logic_mask);
         UartSend(resp);
         return;
@@ -215,6 +227,13 @@ static void PollUartCommand(void)
   }
 }
 
+static uint8_t PackInputBits(void)
+{
+  return (uint8_t)((in_state[0] ? 1U : 0U) |
+                   ((in_state[1] ? 1U : 0U) << 1) |
+                   ((in_state[2] ? 1U : 0U) << 2) |
+                   ((in_state[3] ? 1U : 0U) << 3));
+}
 /* USER CODE END 0 */
 
 /**
@@ -247,8 +266,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-  /* USER CODE BEGIN 2 */
 
+  /* USER CODE BEGIN 2 */
+  ctrlEventGroup = xEventGroupCreate();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -269,8 +289,16 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* definition and creation of uartTask */
+  osThreadDef(uartTask, StartUartTask, osPriorityIdle, 0, 512);
+  uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
+
+  /* definition and creation of inputTask */
+  osThreadDef(inputTask, StartInputTask, osPriorityIdle, 0, 128);
+  inputTaskHandle = osThreadCreate(osThread(inputTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -407,14 +435,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
-  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -449,17 +469,64 @@ void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
-  for(;;)
-  {
-	  ReadInputs();
+	for(;;)
+	{
+	  xEventGroupWaitBits(ctrlEventGroup,
+	                      EVT_INPUT_CHANGED | EVT_MASK_CHANGED,
+	                      pdTRUE, pdFALSE, portMAX_DELAY);
+
 	  ApplyLogic();
 	  WriteOutputs();
+	}
+  /* USER CODE END 5 */
+}
 
+/* USER CODE BEGIN Header_StartUartTask */
+/**
+* @brief Function implementing the uartTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartUartTask */
+void StartUartTask(void const * argument)
+{
+  /* USER CODE BEGIN StartUartTask */
+  /* Infinite loop */
+	for(;;)
+	{
 	  PollUartCommand();
+	  osDelay(2);
+	}
+  /* USER CODE END StartUartTask */
+}
+
+/* USER CODE BEGIN Header_StartInputTask */
+/**
+* @brief Function implementing the inputTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartInputTask */
+void StartInputTask(void const * argument)
+{
+  /* USER CODE BEGIN StartInputTask */
+  /* Infinite loop */
+	uint8_t prev = 0xFFU;
+
+	for(;;)
+	{
+	  ReadInputs();
+	  in_bits = PackInputBits();
+
+	  if (in_bits != prev)
+	  {
+	    prev = in_bits;
+	    xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED);
+	  }
 
 	  osDelay(10);
-  }
-  /* USER CODE END 5 */
+	}
+  /* USER CODE END StartInputTask */
 }
 
 /**
