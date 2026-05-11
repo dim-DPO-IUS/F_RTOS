@@ -307,3 +307,13 @@
 2026-05-11 10:05:32,346 [ERROR] ConfigurationRetriever:142 - IOException on connection: Сеть недоступна
 2026-05-11 10:05:32,346 [ERROR] ConfigurationRetriever:142 - IOException on connection: Сеть недоступна
 2026-05-11 10:05:32,346 [ERROR] ConfigurationRetriever:142 - IOException on connection: Сеть недоступна
+2026-05-11 19:33:04,008 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:04,008 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:04,008 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:04,008 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:04,009 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:05,199 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:05,199 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:05,199 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:05,199 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net
+2026-05-11 19:33:05,200 [ERROR] AdobePublisher:162 - Exception while opening the connection: java.net.UnknownHostException: stmicroelectronics.d3.sc.omtrdc.net

@@ -34,13 +34,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-//#define EVT_IN1            (1U << 0)
-//#define EVT_IN2            (1U << 1)
-//#define EVT_IN3            (1U << 2)
-//#define EVT_IN4            (1U << 3)
-//#define EVT_INPUT_CHANGED  (1U << 4)
-//#define EVT_MASK_CHANGED   (1U << 5)
-
 #define EVT_IN1            (1U << 3)
 #define EVT_IN2            (1U << 2)
 #define EVT_IN3            (1U << 1)
@@ -65,12 +58,9 @@ osThreadId inputTaskHandle;
 osThreadId out2TaskHandle;
 osThreadId out3TaskHandle;
 osThreadId out4TaskHandle;
+
 /* USER CODE BEGIN PV */
-volatile uint8_t out_bits  = 0;
-
 EventGroupHandle_t ctrlEventGroup;
-
-
 static uint8_t out_masks[OUT_COUNT] = {0x08, 0x04, 0x02, 0x01};
 /*
 ------+-------+------+---------------------
@@ -81,7 +71,7 @@ OUT2  |	0x04  = 0100 | EVT_IN2	Кнопка IN2
 OUT3  |	0x02  = 0010 | EVT_IN3	Кнопка IN3
 OUT4  |	0x01  = 0001 | EVT_IN4	Кнопка IN4
 ------+--------------+---------------------
- * */
+*/
 
 static char rx_line[64];
 static uint8_t rx_pos = 0;
@@ -122,33 +112,30 @@ static void ProcessCommand(char *cmd)
     n--;
   }
 
-  /* In? — читаем текущие биты событий */
+  /* In? — читаем пины напрямую для актуального состояния */
   if (strcmp(cmd, "In?") == 0)
   {
-//	  osDelay(15);
-    EventBits_t bits = xEventGroupGetBits(ctrlEventGroup);
-    snprintf(resp, sizeof(resp), "IN: %d%d%d%d\r\n",
-             (bits & EVT_IN1) ? 1 : 0,
-             (bits & EVT_IN2) ? 1 : 0,
-             (bits & EVT_IN3) ? 1 : 0,
-             (bits & EVT_IN4) ? 1 : 0);
+    int in1 = (HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) == GPIO_PIN_RESET) ? 1 : 0;
+    int in2 = (HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) == GPIO_PIN_RESET) ? 1 : 0;
+    int in3 = (HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) == GPIO_PIN_RESET) ? 1 : 0;
+    int in4 = (HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) == GPIO_PIN_RESET) ? 1 : 0;
+    snprintf(resp, sizeof(resp), "IN: %d%d%d%d\r\n", in1, in2, in3, in4);
     UartSend(resp);
     return;
   }
 
   /* Mask m1m1m1m1 m2m2m2m2 m3m3m3m3 m4m4m4m4 */
   {
-    char m1[8] = {0}, m2[8] = {0}, m3[8] = {0}, m4[8] = {0};
-    if (sscanf(cmd, "Mask %4s %4s %4s %4s", m1, m2, m3, m4) == 4)
+    char m[4][8] = {{0}};
+    if (sscanf(cmd, "Mask %4s %4s %4s %4s", m[0], m[1], m[2], m[3]) == 4)
     {
-      char *masks[4] = {m1, m2, m3, m4};
       int valid = 1;
       for (int i = 0; i < 4; i++)
       {
-        if (strlen(masks[i]) != 4) { valid = 0; break; }
+        if (strlen(m[i]) != 4) { valid = 0; break; }
         for (int j = 0; j < 4; j++)
         {
-          if (masks[i][j] != '0' && masks[i][j] != '1') { valid = 0; break; }
+          if (m[i][j] != '0' && m[i][j] != '1') { valid = 0; break; }
         }
         if (!valid) break;
       }
@@ -161,15 +148,15 @@ static void ProcessCommand(char *cmd)
 
       for (int i = 0; i < 4; i++)
       {
-        out_masks[i] = (uint8_t)((masks[i][0] == '1' ? 0x08U : 0U) |
-                                 (masks[i][1] == '1' ? 0x04U : 0U) |
-                                 (masks[i][2] == '1' ? 0x02U : 0U) |
-                                 (masks[i][3] == '1' ? 0x01U : 0U));
+        out_masks[i] = (uint8_t)((m[i][0] == '1' ? 0x08U : 0U) |
+                                 (m[i][1] == '1' ? 0x04U : 0U) |
+                                 (m[i][2] == '1' ? 0x02U : 0U) |
+                                 (m[i][3] == '1' ? 0x01U : 0U));
       }
 
       xEventGroupSetBits(ctrlEventGroup, EVT_MASK_CHANGED);
 
-      snprintf(resp, sizeof(resp), "OK: MASK=%s %s %s %s\r\n", m1, m2, m3, m4);
+      snprintf(resp, sizeof(resp), "OK: MASK=%s %s %s %s\r\n", m[0], m[1], m[2], m[3]);
       UartSend(resp);
       return;
     }
@@ -406,43 +393,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-static void ApplyOutputs(uint8_t input_bits)
-{
-  uint8_t i;
-  GPIO_TypeDef* port;
-  uint16_t pin;
-
-  for (i = 0; i < OUT_COUNT; i++)
-  {
-    if (out_masks[i] == 0x00) continue;
-
-    if ((input_bits & out_masks[i]) == out_masks[i])
-    {
-      switch (i)
-      {
-        case 0:  port = OUT1_GPIO_Port; pin = OUT1_Pin; break;
-        case 1:  port = OUT2_GPIO_Port; pin = OUT2_Pin; break;
-        case 2:  port = OUT3_GPIO_Port; pin = OUT3_Pin; break;
-        case 3:  port = OUT4_GPIO_Port; pin = OUT4_Pin; break;
-        default: continue;
-      }
-      HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET);
-    }
-    else
-    {
-      switch (i)
-      {
-        case 0:  port = OUT1_GPIO_Port; pin = OUT1_Pin; break;
-        case 1:  port = OUT2_GPIO_Port; pin = OUT2_Pin; break;
-        case 2:  port = OUT3_GPIO_Port; pin = OUT3_Pin; break;
-        case 3:  port = OUT4_GPIO_Port; pin = OUT4_Pin; break;
-        default: continue;
-      }
-      HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
-    }
-  }
-}
-
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartOut1Task */
@@ -452,31 +402,76 @@ static void ApplyOutputs(uint8_t input_bits)
   * @retval None
   */
 /* USER CODE END Header_StartOut1Task */
-//void StartOut1Task(void const * argument)
-//{
-//  /* USER CODE BEGIN 5 */
-//  for(;;)
-//  {
-//	  xEventGroupWaitBits(ctrlEventGroup, 0x01, 0x01, pdTRUE, portMAX_DELAY);
-//	  HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_SET);
-//
-//  }
-//  /* USER CODE END 5 */
-//}
-
 void StartOut1Task(void const * argument)
 {
+//  /* USER CODE BEGIN 5 */
   for(;;)
   {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    EventBits_t bits = xEventGroupGetBits(ctrlEventGroup);
+	EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
     if (out_masks[0] != 0x00 && (bits & out_masks[0]) == out_masks[0])
       HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_SET);
     else
       HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_RESET);
   }
+  //  /* USER CODE END 5 */
 }
 
+/* USER CODE BEGIN Header_StartOut2Task */
+/**
+* @brief Function implementing the out2Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartOut2Task */
+void StartOut2Task(void const * argument)
+{
+  for(;;)
+  {
+	EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (out_masks[1] != 0x00 && (bits & out_masks[1]) == out_masks[1])
+      HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_RESET);
+  }
+}
+
+/* USER CODE BEGIN Header_StartOut3Task */
+/**
+* @brief Function implementing the out3Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartOut3Task */
+void StartOut3Task(void const * argument)
+{
+  for(;;)
+  {
+	EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (out_masks[2] != 0x00 && (bits & out_masks[2]) == out_masks[2])
+      HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_RESET);
+  }
+}
+
+/* USER CODE BEGIN Header_StartOut4Task */
+/**
+* @brief Function implementing the out4Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartOut4Task */
+void StartOut4Task(void const * argument)
+{
+  for(;;)
+  {
+	EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (out_masks[3] != 0x00 && (bits & out_masks[3]) == out_masks[3])
+      HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_RESET);
+  }
+}
 
 /* USER CODE BEGIN Header_StartUartTask */
 /**
@@ -536,94 +531,36 @@ void StartInputTask(void const * argument)
 
   for(;;)
   {
-	    curr = (uint8_t)((HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) ? 0x08U : 0U) |
-	                     (HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) ? 0x04U : 0U) |
-	                     (HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) ? 0x02U : 0U) |
-	                     (HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) ? 0x01U : 0U));
+	curr = (uint8_t)((HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) ? 0x08U : 0U) |
+					 (HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) ? 0x04U : 0U) |
+					 (HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) ? 0x02U : 0U) |
+					 (HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) ? 0x01U : 0U));
 
-	    if (curr & 0x08U) xEventGroupClearBits(ctrlEventGroup, EVT_IN1);
-	    else             xEventGroupSetBits(ctrlEventGroup, EVT_IN1);
+	if (curr & 0x08U) xEventGroupClearBits(ctrlEventGroup, EVT_IN1);
+	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN1);
 
-	    if (curr & 0x04U) xEventGroupClearBits(ctrlEventGroup, EVT_IN2);
-	    else             xEventGroupSetBits(ctrlEventGroup, EVT_IN2);
+	if (curr & 0x04U) xEventGroupClearBits(ctrlEventGroup, EVT_IN2);
+	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN2);
 
-	    if (curr & 0x02U) xEventGroupClearBits(ctrlEventGroup, EVT_IN3);
-	    else             xEventGroupSetBits(ctrlEventGroup, EVT_IN3);
+	if (curr & 0x02U) xEventGroupClearBits(ctrlEventGroup, EVT_IN3);
+	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN3);
 
-	    if (curr & 0x01U) xEventGroupClearBits(ctrlEventGroup, EVT_IN4);
-	    else             xEventGroupSetBits(ctrlEventGroup, EVT_IN4);
+	if (curr & 0x01U) xEventGroupClearBits(ctrlEventGroup, EVT_IN4);
+	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN4);
 
-    if (curr != prev)
-    {
-      prev = curr;
-      xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED);
-    }
+	if (curr != prev)
+	{
+	prev = curr;
+	xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED);
+	}
 
-    osDelay(10);
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	osDelay(10);
+	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
   }
   /* USER CODE END StartInputTask */
 }
 
-/* USER CODE BEGIN Header_StartOut2Task */
-/**
-* @brief Function implementing the out2Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartOut2Task */
-void StartOut2Task(void const * argument)
-{
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    EventBits_t bits = xEventGroupGetBits(ctrlEventGroup);
-    if (out_masks[1] != 0x00 && (bits & out_masks[1]) == out_masks[1])
-      HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_RESET);
-  }
-}
 
-/* USER CODE BEGIN Header_StartOut3Task */
-/**
-* @brief Function implementing the out3Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartOut3Task */
-void StartOut3Task(void const * argument)
-{
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    EventBits_t bits = xEventGroupGetBits(ctrlEventGroup);
-    if (out_masks[2] != 0x00 && (bits & out_masks[2]) == out_masks[2])
-      HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_RESET);
-  }
-}
-
-/* USER CODE BEGIN Header_StartOut4Task */
-/**
-* @brief Function implementing the out4Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartOut4Task */
-void StartOut4Task(void const * argument)
-{
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    EventBits_t bits = xEventGroupGetBits(ctrlEventGroup);
-    if (out_masks[3] != 0x00 && (bits & out_masks[3]) == out_masks[3])
-      HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_RESET);
-  }
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode
