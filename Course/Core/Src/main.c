@@ -124,6 +124,80 @@ static void ProcessCommand(char *cmd)
     return;
   }
 
+  /* Mask? — опрос текущих масок */
+  if (strcmp(cmd, "Mask?") == 0)
+  {
+    char m[4][5];
+    for (int i = 0; i < 4; i++)
+    {
+      m[i][0] = (out_masks[i] & 0x08U) ? '1' : '0';
+      m[i][1] = (out_masks[i] & 0x04U) ? '1' : '0';
+      m[i][2] = (out_masks[i] & 0x02U) ? '1' : '0';
+      m[i][3] = (out_masks[i] & 0x01U) ? '1' : '0';
+      m[i][4] = '\0';
+    }
+    snprintf(resp, sizeof(resp), "MASK: %s %s %s %s\r\n", m[0], m[1], m[2], m[3]);
+    UartSend(resp);
+    return;
+  }
+
+  /* Out? — опрос состояния выходов */
+  if (strcmp(cmd, "Out?") == 0)
+  {
+    int o1 = (HAL_GPIO_ReadPin(OUT1_GPIO_Port, OUT1_Pin) == GPIO_PIN_SET) ? 1 : 0;
+    int o2 = (HAL_GPIO_ReadPin(OUT2_GPIO_Port, OUT2_Pin) == GPIO_PIN_SET) ? 1 : 0;
+    int o3 = (HAL_GPIO_ReadPin(OUT3_GPIO_Port, OUT3_Pin) == GPIO_PIN_SET) ? 1 : 0;
+    int o4 = (HAL_GPIO_ReadPin(OUT4_GPIO_Port, OUT4_Pin) == GPIO_PIN_SET) ? 1 : 0;
+    snprintf(resp, sizeof(resp), "OUT: %d %d %d %d\r\n", o1, o2, o3, o4);
+    UartSend(resp);
+    return;
+  }
+
+  /* Out N on/off — прямое временное управление выходом */
+  {
+    int num;
+    char action[8] = {0};
+    if (sscanf(cmd, "Out %d %7s", &num, action) == 2)
+    {
+      if (num < 1 || num > 4)
+      {
+        UartSend("ERR: Out number must be 1-4\r\n");
+        return;
+      }
+
+      GPIO_TypeDef* port;
+      uint16_t pin;
+      switch (num)
+      {
+        case 1: port = OUT1_GPIO_Port; pin = OUT1_Pin; break;
+        case 2: port = OUT2_GPIO_Port; pin = OUT2_Pin; break;
+        case 3: port = OUT3_GPIO_Port; pin = OUT3_Pin; break;
+        case 4: port = OUT4_GPIO_Port; pin = OUT4_Pin; break;
+        default: return;
+      }
+
+      if (strcmp(action, "on") == 0)
+      {
+        HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET);
+        snprintf(resp, sizeof(resp), "OK: Out %d on\r\n", num);
+        UartSend(resp);
+        return;
+      }
+      else if (strcmp(action, "off") == 0)
+      {
+        HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
+        snprintf(resp, sizeof(resp), "OK: Out %d off\r\n", num);
+        UartSend(resp);
+        return;
+      }
+      else
+      {
+        UartSend("ERR: use Out N on or Out N off\r\n");
+        return;
+      }
+    }
+  }
+
   /* Mask m1m1m1m1 m2m2m2m2 m3m3m3m3 m4m4m4m4 */
   {
     char m[4][8] = {{0}};
@@ -404,7 +478,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartOut1Task */
 void StartOut1Task(void const * argument)
 {
-//  /* USER CODE BEGIN 5 */
+  /* USER CODE BEGIN 5 */
   for(;;)
   {
 	EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
@@ -413,7 +487,7 @@ void StartOut1Task(void const * argument)
     else
       HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_RESET);
   }
-  //  /* USER CODE END 5 */
+    /* USER CODE END 5 */
 }
 
 /* USER CODE BEGIN Header_StartOut2Task */
@@ -526,37 +600,51 @@ void StartUartTask(void const * argument)
 void StartInputTask(void const * argument)
 {
   /* USER CODE BEGIN StartInputTask */
-  uint8_t prev = 0xFFU;
-  uint8_t curr;
+	uint8_t prev = 0xFFU;
+	uint8_t curr;
+	uint8_t stable = 0xFFU;
+	uint8_t debounce_ctr = 0;
 
-  for(;;)
-  {
-	curr = (uint8_t)((HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) ? 0x08U : 0U) |
-					 (HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) ? 0x04U : 0U) |
-					 (HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) ? 0x02U : 0U) |
-					 (HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) ? 0x01U : 0U));
-
-	if (curr & 0x08U) xEventGroupClearBits(ctrlEventGroup, EVT_IN1);
-	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN1);
-
-	if (curr & 0x04U) xEventGroupClearBits(ctrlEventGroup, EVT_IN2);
-	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN2);
-
-	if (curr & 0x02U) xEventGroupClearBits(ctrlEventGroup, EVT_IN3);
-	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN3);
-
-	if (curr & 0x01U) xEventGroupClearBits(ctrlEventGroup, EVT_IN4);
-	else             xEventGroupSetBits(ctrlEventGroup, EVT_IN4);
-
-	if (curr != prev)
+	for(;;)
 	{
-	prev = curr;
-	xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED);
-	}
+	    curr = (uint8_t)((HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) ? 0x08U : 0U) |
+	                     (HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) ? 0x04U : 0U) |
+	                     (HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) ? 0x02U : 0U) |
+	                     (HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) ? 0x01U : 0U));
 
-	osDelay(10);
-	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-  }
+	    if (curr == stable)
+	    {
+	        debounce_ctr = 0;
+	    }
+	    else
+	    {
+	        debounce_ctr++;
+	        if (debounce_ctr >= 2)
+	        {
+	            stable = curr;
+	            debounce_ctr = 0;
+
+	            /* Подтверждённое изменение — обновляем биты событий */
+	            if (stable & 0x08U) xEventGroupClearBits(ctrlEventGroup, EVT_IN1);
+	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN1);
+
+	            if (stable & 0x04U) xEventGroupClearBits(ctrlEventGroup, EVT_IN2);
+	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN2);
+
+	            if (stable & 0x02U) xEventGroupClearBits(ctrlEventGroup, EVT_IN3);
+	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN3);
+
+	            if (stable & 0x01U) xEventGroupClearBits(ctrlEventGroup, EVT_IN4);
+	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN4);
+
+	            prev = stable;
+	            xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED);
+	        }
+	    }
+
+	    osDelay(10);
+//	    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	}
   /* USER CODE END StartInputTask */
 }
 
