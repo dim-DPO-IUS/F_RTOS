@@ -2080,3 +2080,300 @@ Finished building: default.size.stdout
  
 Finished building: Course.list
  
+09:47:59 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25660	    100	  18436	  44196	   aca4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+09:48:18 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:603:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  603 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25676	    100	  18436	  44212	   acb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+11:45:21 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25772	    100	  18436	  44308	   ad14	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+11:46:21 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25740	    100	  18436	  44276	   acf4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+11:46:40 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25772	    100	  18436	  44308	   ad14	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+12:05:27 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25804	    100	  18436	  44340	   ad34	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+12:06:38 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25804	    100	  18436	  44340	   ad34	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+13:15:17 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25804	    100	  18436	  44340	   ad34	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+13:17:35 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-size  Course.elf 
+   text	   data	    bss	    dec	    hex	filename
+  25804	    100	  18436	  44340	   ad34	Course.elf
+Finished building: default.size.stdout
+ 
+13:19:01 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:631:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  631 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25772	    100	  18436	  44308	   ad14	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+13:44:07 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:603:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  603 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25676	    100	  18436	  44212	   acb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+14:28:26 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartOut1Task':
+../Core/Src/main.c:486:34: error: 'bits' undeclared (first use in this function)
+  486 |     if (out_masks[0] != 0x00 && (bits & out_masks[0]) == out_masks[0])
+      |                                  ^~~~
+../Core/Src/main.c:486:34: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:604:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  604 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+make: *** [Core/Src/subdir.mk:40: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+14:28:48 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:604:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  604 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25676	    100	  18436	  44212	   acb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+14:29:15 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:604:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  604 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25676	    100	  18436	  44212	   acb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+14:29:59 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:604:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  604 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25676	    100	  18436	  44212	   acb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+14:30:33 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:604:17: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+  604 |         uint8_t prev = 0xFFU;
+      |                 ^~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25676	    100	  18436	  44212	   acb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+15:12:57 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25932	    100	  18436	  44468	   adb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+18:27:52 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25932	    100	  18436	  44468	   adb4	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
