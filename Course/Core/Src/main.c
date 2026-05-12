@@ -34,10 +34,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define EVT_IN1            (1U << 3)
-#define EVT_IN2            (1U << 2)
-#define EVT_IN3            (1U << 1)
-#define EVT_IN4            (1U << 0)
+#define EVT_OUT1           (1U << 0)
+#define EVT_OUT2           (1U << 1)
+#define EVT_OUT3           (1U << 2)
+#define EVT_OUT4           (1U << 3)
 #define EVT_INPUT_CHANGED_1  (1U << 4)
 #define EVT_INPUT_CHANGED_2  (1U << 5)
 #define EVT_INPUT_CHANGED_3  (1U << 6)
@@ -69,10 +69,10 @@ static uint8_t out_masks[OUT_COUNT] = {0x08, 0x04, 0x02, 0x01};
 ------+-------+------+---------------------
 Выход |	Маска |	Бит  | Реагирует на
 ------+-------+------+---------------------
-OUT1  |	0x08  = 1000 | EVT_IN1	Кнопка IN1
-OUT2  |	0x04  = 0100 | EVT_IN2	Кнопка IN2
-OUT3  |	0x02  = 0010 | EVT_IN3	Кнопка IN3
-OUT4  |	0x01  = 0001 | EVT_IN4	Кнопка IN4
+OUT1  |	0x08  = 1000 | IN1
+OUT2  |	0x04  = 0100 | IN2
+OUT3  |	0x02  = 0010 | IN3
+OUT4  |	0x01  = 0001 | IN4
 ------+--------------+---------------------
 */
 
@@ -115,7 +115,7 @@ static void ProcessCommand(char *cmd)
     n--;
   }
 
-  /* In? — читаем пины напрямую для актуального состояния */
+  /* In? — читаем пины напрямую */
   if (strcmp(cmd, "In?") == 0)
   {
     int in1 = (HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) == GPIO_PIN_RESET) ? 1 : 0;
@@ -127,7 +127,7 @@ static void ProcessCommand(char *cmd)
     return;
   }
 
-  /* Mask? — опрос текущих масок */
+  /* Mask? */
   if (strcmp(cmd, "Mask?") == 0)
   {
     char m[4][5];
@@ -144,7 +144,7 @@ static void ProcessCommand(char *cmd)
     return;
   }
 
-  /* Out? — опрос состояния выходов */
+  /* Out? */
   if (strcmp(cmd, "Out?") == 0)
   {
     int o1 = (HAL_GPIO_ReadPin(OUT1_GPIO_Port, OUT1_Pin) == GPIO_PIN_SET) ? 1 : 0;
@@ -156,7 +156,7 @@ static void ProcessCommand(char *cmd)
     return;
   }
 
-  /* Out N on/off — прямое временное управление выходом */
+  /* Out N on/off */
   {
     int num;
     char action[8] = {0};
@@ -201,7 +201,7 @@ static void ProcessCommand(char *cmd)
     }
   }
 
-  /* Mask m1m1m1m1 m2m2m2m2 m3m3m3m3 m4m4m4m4 */
+  /* Mask XXXX XXXX XXXX XXXX */
   {
     char m[4][8] = {{0}};
     if (sscanf(cmd, "Mask %4s %4s %4s %4s", m[0], m[1], m[2], m[3]) == 4)
@@ -257,21 +257,18 @@ int main(void)
 
   /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
 
-  /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
@@ -291,47 +288,32 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* definition and creation of out1Task */
   osThreadDef(out1Task, StartOut1Task, osPriorityNormal, 0, 128);
   out1TaskHandle = osThreadCreate(osThread(out1Task), NULL);
 
-  /* definition and creation of uartTask */
   osThreadDef(uartTask, StartUartTask, osPriorityIdle, 0, 512);
   uartTaskHandle = osThreadCreate(osThread(uartTask), NULL);
 
-  /* definition and creation of inputTask */
   osThreadDef(inputTask, StartInputTask, osPriorityAboveNormal, 0, 512);
   inputTaskHandle = osThreadCreate(osThread(inputTask), NULL);
 
-  /* definition and creation of out2Task */
   osThreadDef(out2Task, StartOut2Task, osPriorityNormal, 0, 128);
   out2TaskHandle = osThreadCreate(osThread(out2Task), NULL);
 
-  /* definition and creation of out3Task */
   osThreadDef(out3Task, StartOut3Task, osPriorityNormal, 0, 128);
   out3TaskHandle = osThreadCreate(osThread(out3Task), NULL);
 
-  /* definition and creation of out4Task */
   osThreadDef(out4Task, StartOut4Task, osPriorityNormal, 0, 128);
   out4TaskHandle = osThreadCreate(osThread(out4Task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* USER CODE END RTOS_THREADS */
 
-  /* Start scheduler */
   osKernelStart();
 
-  /* We should never get here as control is now taken by the scheduler */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   }
-  /* USER CODE END 3 */
 }
 
 /**
@@ -343,14 +325,9 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Configure the main internal regulator output voltage
-  */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -365,8 +342,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
@@ -425,38 +400,31 @@ static void MX_GPIO_Init(void)
 
   /* USER CODE END MX_GPIO_Init_1 */
 
-  /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, OUT1_Pin|OUT2_Pin|OUT3_Pin|OUT4_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : IN1_Pin IN2_Pin IN3_Pin IN4_Pin */
   GPIO_InitStruct.Pin = IN1_Pin|IN2_Pin|IN3_Pin|IN4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : OUT1_Pin OUT2_Pin OUT3_Pin OUT4_Pin */
   GPIO_InitStruct.Pin = OUT1_Pin|OUT2_Pin|OUT3_Pin|OUT4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -484,19 +452,8 @@ void StartOut1Task(void const * argument)
   /* USER CODE BEGIN 5 */
   for(;;)
   {
-	/*
-	EventBits_t xEventGroupWaitBits(
-    EventGroupHandle_t xEventGroup,      // 1-й: хендл группы (ctrlEventGroup)
-    const EventBits_t uxBitsToWaitFor,   // 2-й: КАКИЕ биты ждать
-    const BaseType_t xClearOnExit,       // 3-й: очищать ли при выходе
-    const BaseType_t xWaitForAllBits,    // 4-й: ждать все или любое
-    TickType_t xTicksToWait              // 5-й: таймаут
-	);*/
-    EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup,
-        EVT_INPUT_CHANGED_1 | EVT_MASK_CHANGED,
-        pdTRUE, pdFALSE, portMAX_DELAY);
-
-    if (out_masks[0] != 0x00 && (bits & out_masks[0]) == out_masks[0])
+    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_1 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT1)
       HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_SET);
     else
       HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_RESET);
@@ -515,11 +472,8 @@ void StartOut2Task(void const * argument)
 {
   for(;;)
   {
-    EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup,
-        EVT_INPUT_CHANGED_2 | EVT_MASK_CHANGED,
-        pdTRUE, pdFALSE, portMAX_DELAY);
-
-    if (out_masks[1] != 0x00 && (bits & out_masks[1]) == out_masks[1])
+    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_2 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT2)
       HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_SET);
     else
       HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_RESET);
@@ -537,11 +491,8 @@ void StartOut3Task(void const * argument)
 {
   for(;;)
   {
-    EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup,
-        EVT_INPUT_CHANGED_3 | EVT_MASK_CHANGED,
-        pdTRUE, pdFALSE, portMAX_DELAY);
-
-    if (out_masks[2] != 0x00 && (bits & out_masks[2]) == out_masks[2])
+    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_3 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT3)
       HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_SET);
     else
       HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_RESET);
@@ -559,11 +510,8 @@ void StartOut4Task(void const * argument)
 {
   for(;;)
   {
-    EventBits_t bits = xEventGroupWaitBits(ctrlEventGroup,
-        EVT_INPUT_CHANGED_4 | EVT_MASK_CHANGED,
-        pdTRUE, pdFALSE, portMAX_DELAY);
-
-    if (out_masks[3] != 0x00 && (bits & out_masks[3]) == out_masks[3])
+    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_4 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
+    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT4)
       HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_SET);
     else
       HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_RESET);
@@ -646,33 +594,37 @@ void StartInputTask(void const * argument)
 	            stable = curr;
 	            debounce_ctr = 0;
 
-	            if (stable & 0x08U) xEventGroupClearBits(ctrlEventGroup, EVT_IN1);
-	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN1);
-
-	            if (stable & 0x04U) xEventGroupClearBits(ctrlEventGroup, EVT_IN2);
-	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN2);
-
-	            if (stable & 0x02U) xEventGroupClearBits(ctrlEventGroup, EVT_IN3);
-	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN3);
-
-	            if (stable & 0x01U) xEventGroupClearBits(ctrlEventGroup, EVT_IN4);
-	            else               xEventGroupSetBits(ctrlEventGroup, EVT_IN4);
-
+	            /* inv: 1 = кнопка нажата */
 	            uint8_t inv = (uint8_t)(~stable & 0x0FU);
 
-	            uint8_t curr_conditions = 0x00U;
-	            if (out_masks[0] != 0x00 && (inv & out_masks[0]) == out_masks[0]) curr_conditions |= (1U << 0);
-	            if (out_masks[1] != 0x00 && (inv & out_masks[1]) == out_masks[1]) curr_conditions |= (1U << 1);
-	            if (out_masks[2] != 0x00 && (inv & out_masks[2]) == out_masks[2]) curr_conditions |= (1U << 2);
-	            if (out_masks[3] != 0x00 && (inv & out_masks[3]) == out_masks[3]) curr_conditions |= (1U << 3);
+	            /* Вычисляем состояния выходов */
+	            uint8_t new_conditions = 0x00U;
+	            if (out_masks[0] != 0x00 && (inv & out_masks[0]) == out_masks[0]) new_conditions |= (1U << 0);
+	            if (out_masks[1] != 0x00 && (inv & out_masks[1]) == out_masks[1]) new_conditions |= (1U << 1);
+	            if (out_masks[2] != 0x00 && (inv & out_masks[2]) == out_masks[2]) new_conditions |= (1U << 2);
+	            if (out_masks[3] != 0x00 && (inv & out_masks[3]) == out_masks[3]) new_conditions |= (1U << 3);
 
-	            uint8_t changed = curr_conditions ^ prev_conditions;
+	            /* Обновляем биты EVT_OUT1..EVT_OUT4 в ctrlEventGroup */
+	            EventBits_t current = xEventGroupGetBits(ctrlEventGroup);
+	            EventBits_t mask_out = EVT_OUT1 | EVT_OUT2 | EVT_OUT3 | EVT_OUT4;
+	            EventBits_t new_bits = ((new_conditions & 0x01U) ? EVT_OUT1 : 0U) |
+	                                   ((new_conditions & 0x02U) ? EVT_OUT2 : 0U) |
+	                                   ((new_conditions & 0x04U) ? EVT_OUT3 : 0U) |
+	                                   ((new_conditions & 0x08U) ? EVT_OUT4 : 0U);
+
+	            /* Сбрасываем все 4 бита, затем устанавливаем нужные */
+	            xEventGroupClearBits(ctrlEventGroup, mask_out);
+	            if (new_bits)
+	              xEventGroupSetBits(ctrlEventGroup, new_bits);
+
+	            /* Выставляем флаги изменения только для изменившихся выходов */
+	            uint8_t changed = new_conditions ^ prev_conditions;
 	            if (changed & (1U << 0)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_1);
 	            if (changed & (1U << 1)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_2);
 	            if (changed & (1U << 2)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_3);
 	            if (changed & (1U << 3)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_4);
 
-	            prev_conditions = curr_conditions;
+	            prev_conditions = new_conditions;
 	        }
 	    }
 
@@ -710,7 +662,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {
@@ -718,18 +669,9 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

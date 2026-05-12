@@ -2377,3 +2377,64 @@ Finished building: default.size.stdout
  
 Finished building: Course.list
  
+18:32:07 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:624:33: warning: unused variable 'current' [-Wunused-variable]
+  624 |                     EventBits_t current = xEventGroupGetBits(ctrlEventGroup);
+      |                                 ^~~~~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25804	    100	  18436	  44340	   ad34	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+18:36:30 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:616:33: warning: unused variable 'current' [-Wunused-variable]
+  616 |                     EventBits_t current = xEventGroupGetBits(ctrlEventGroup);
+      |                                 ^~~~~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25804	    100	  18436	  44340	   ad34	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+18:52:31 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'StartInputTask':
+../Core/Src/main.c:608:33: warning: unused variable 'current' [-Wunused-variable]
+  608 |                     EventBits_t current = xEventGroupGetBits(ctrlEventGroup);
+      |                                 ^~~~~~~
+arm-none-eabi-gcc -o "Course.elf" @"objects.list"   -mcpu=cortex-m4 -T"/mnt/DATA-1/0Dev/MC-Dev/0-LESSONS/01/src/work4dak/F_RTOS/Course/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Course.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Course.elf
+ 
+arm-none-eabi-size  Course.elf 
+arm-none-eabi-objdump -h -S Course.elf  > "Course.list"
+   text	   data	    bss	    dec	    hex	filename
+  25788	    100	  18436	  44324	   ad24	Course.elf
+Finished building: default.size.stdout
+ 
+Finished building: Course.list
+ 
+18:53:22 **** Incremental Build of configuration Debug for project Course ****
+make -j16 all 
+arm-none-eabi-size  Course.elf 
+   text	   data	    bss	    dec	    hex	filename
+  25788	    100	  18436	  44324	   ad24	Course.elf
+Finished building: default.size.stdout
+ 
