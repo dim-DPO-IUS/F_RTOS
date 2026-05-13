@@ -34,17 +34,17 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define EVT_OUT1           (1U << 0)
-#define EVT_OUT2           (1U << 1)
-#define EVT_OUT3           (1U << 2)
-#define EVT_OUT4           (1U << 3)
-#define EVT_INPUT_CHANGED_1  (1U << 4)
-#define EVT_INPUT_CHANGED_2  (1U << 5)
-#define EVT_INPUT_CHANGED_3  (1U << 6)
-#define EVT_INPUT_CHANGED_4  (1U << 7)
-#define EVT_MASK_CHANGED   (1U << 8)
+
+#define EVT_OUT1_CHANGED   (1U << 0)
+#define EVT_OUT2_CHANGED   (1U << 1)
+#define EVT_OUT3_CHANGED   (1U << 2)
+#define EVT_OUT4_CHANGED   (1U << 3)
+
+#define EVT_MASK_CHANGED   (1U << 4)
 
 #define OUT_COUNT 4
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -64,17 +64,22 @@ osThreadId out4TaskHandle;
 
 /* USER CODE BEGIN PV */
 EventGroupHandle_t ctrlEventGroup;
-static uint8_t out_masks[OUT_COUNT] = {0x08, 0x04, 0x02, 0x01};
+
+static uint8_t out_masks[OUT_COUNT] =
+{
+    0x08,
+    0x04,
+    0x02,
+    0x01
+};
+
 /*
-------+-------+------+---------------------
-Выход |	Маска |	Бит  | Реагирует на
-------+-------+------+---------------------
-OUT1  |	0x08  = 1000 | IN1
-OUT2  |	0x04  = 0100 | IN2
-OUT3  |	0x02  = 0010 | IN3
-OUT4  |	0x01  = 0001 | IN4
-------+--------------+---------------------
-*/
+ * bit0 -> OUT1
+ * bit1 -> OUT2
+ * bit2 -> OUT3
+ * bit3 -> OUT4
+ */
+static volatile uint8_t g_output_state = 0x00U;
 
 static char rx_line[64];
 static uint8_t rx_pos = 0;
@@ -449,17 +454,35 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartOut1Task */
 void StartOut1Task(void const * argument)
 {
-  /* USER CODE BEGIN 5 */
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_1 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT1)
-      HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT1_GPIO_Port, OUT1_Pin, GPIO_PIN_RESET);
-  }
-  /* USER CODE END 5 */
+    for (;;)
+    {
+        xEventGroupWaitBits(
+            ctrlEventGroup,
+            EVT_OUT1_CHANGED,
+            pdTRUE,
+            pdFALSE,
+            portMAX_DELAY
+        );
+
+        if (g_output_state & (1U << 0))
+        {
+            HAL_GPIO_WritePin(
+                OUT1_GPIO_Port,
+                OUT1_Pin,
+                GPIO_PIN_SET
+            );
+        }
+        else
+        {
+            HAL_GPIO_WritePin(
+                OUT1_GPIO_Port,
+                OUT1_Pin,
+                GPIO_PIN_RESET
+            );
+        }
+    }
 }
+
 
 /* USER CODE BEGIN Header_StartOut2Task */
 /**
@@ -470,14 +493,33 @@ void StartOut1Task(void const * argument)
 /* USER CODE END Header_StartOut2Task */
 void StartOut2Task(void const * argument)
 {
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_2 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT2)
-      HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT2_GPIO_Port, OUT2_Pin, GPIO_PIN_RESET);
-  }
+    for (;;)
+    {
+        xEventGroupWaitBits(
+            ctrlEventGroup,
+            EVT_OUT2_CHANGED,
+            pdTRUE,
+            pdFALSE,
+            portMAX_DELAY
+        );
+
+        if (g_output_state & (1U << 1))
+        {
+            HAL_GPIO_WritePin(
+                OUT2_GPIO_Port,
+                OUT2_Pin,
+                GPIO_PIN_SET
+            );
+        }
+        else
+        {
+            HAL_GPIO_WritePin(
+                OUT2_GPIO_Port,
+                OUT2_Pin,
+                GPIO_PIN_RESET
+            );
+        }
+    }
 }
 
 /* USER CODE BEGIN Header_StartOut3Task */
@@ -489,14 +531,33 @@ void StartOut2Task(void const * argument)
 /* USER CODE END Header_StartOut3Task */
 void StartOut3Task(void const * argument)
 {
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_3 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT3)
-      HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT3_GPIO_Port, OUT3_Pin, GPIO_PIN_RESET);
-  }
+    for (;;)
+    {
+        xEventGroupWaitBits(
+            ctrlEventGroup,
+            EVT_OUT3_CHANGED,
+            pdTRUE,
+            pdFALSE,
+            portMAX_DELAY
+        );
+
+        if (g_output_state & (1U << 2))
+        {
+            HAL_GPIO_WritePin(
+                OUT3_GPIO_Port,
+                OUT3_Pin,
+                GPIO_PIN_SET
+            );
+        }
+        else
+        {
+            HAL_GPIO_WritePin(
+                OUT3_GPIO_Port,
+                OUT3_Pin,
+                GPIO_PIN_RESET
+            );
+        }
+    }
 }
 
 /* USER CODE BEGIN Header_StartOut4Task */
@@ -508,14 +569,33 @@ void StartOut3Task(void const * argument)
 /* USER CODE END Header_StartOut4Task */
 void StartOut4Task(void const * argument)
 {
-  for(;;)
-  {
-    xEventGroupWaitBits(ctrlEventGroup, EVT_INPUT_CHANGED_4 | EVT_MASK_CHANGED, pdTRUE, pdFALSE, portMAX_DELAY);
-    if (xEventGroupGetBits(ctrlEventGroup) & EVT_OUT4)
-      HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(OUT4_GPIO_Port, OUT4_Pin, GPIO_PIN_RESET);
-  }
+    for (;;)
+    {
+        xEventGroupWaitBits(
+            ctrlEventGroup,
+            EVT_OUT4_CHANGED,
+            pdTRUE,
+            pdFALSE,
+            portMAX_DELAY
+        );
+
+        if (g_output_state & (1U << 3))
+        {
+            HAL_GPIO_WritePin(
+                OUT4_GPIO_Port,
+                OUT4_Pin,
+                GPIO_PIN_SET
+            );
+        }
+        else
+        {
+            HAL_GPIO_WritePin(
+                OUT4_GPIO_Port,
+                OUT4_Pin,
+                GPIO_PIN_RESET
+            );
+        }
+    }
 }
 
 /* USER CODE BEGIN Header_StartUartTask */
@@ -567,71 +647,108 @@ void StartUartTask(void const * argument)
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartInputTask */
 void StartInputTask(void const * argument)
 {
-  /* USER CODE BEGIN StartInputTask */
-	uint8_t stable = 0xFFU;
-	uint8_t debounce_ctr = 0;
-	uint8_t prev_conditions = 0x00U;
+    uint8_t stable = 0xFFU;
+    uint8_t debounce_ctr = 0;
+    uint8_t prev_conditions = 0x00U;
 
-	for(;;)
-	{
-	    uint8_t curr = (uint8_t)((HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) ? 0x08U : 0U) |
-	                             (HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) ? 0x04U : 0U) |
-	                             (HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) ? 0x02U : 0U) |
-	                             (HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) ? 0x01U : 0U));
+    for (;;)
+    {
+        uint8_t curr =
+            (uint8_t)(
+                ((HAL_GPIO_ReadPin(IN1_GPIO_Port, IN1_Pin) == GPIO_PIN_SET) ? 0x08U : 0U) |
+                ((HAL_GPIO_ReadPin(IN2_GPIO_Port, IN2_Pin) == GPIO_PIN_SET) ? 0x04U : 0U) |
+                ((HAL_GPIO_ReadPin(IN3_GPIO_Port, IN3_Pin) == GPIO_PIN_SET) ? 0x02U : 0U) |
+                ((HAL_GPIO_ReadPin(IN4_GPIO_Port, IN4_Pin) == GPIO_PIN_SET) ? 0x01U : 0U)
+            );
 
-	    if (curr == stable)
-	    {
-	        debounce_ctr = 0;
-	    }
-	    else
-	    {
-	        debounce_ctr++;
-	        if (debounce_ctr >= 2)
-	        {
-	            stable = curr;
-	            debounce_ctr = 0;
+        if (curr == stable)
+        {
+            debounce_ctr = 0;
+        }
+        else
+        {
+            debounce_ctr++;
 
-	            /* inv: 1 = кнопка нажата */
-	            uint8_t inv = (uint8_t)(~stable & 0x0FU);
+            if (debounce_ctr >= 2)
+            {
+                stable = curr;
+                debounce_ctr = 0;
 
-	            /* Вычисляем состояния выходов */
-	            uint8_t new_conditions = 0x00U;
-	            if (out_masks[0] != 0x00 && (inv & out_masks[0]) == out_masks[0]) new_conditions |= (1U << 0);
-	            if (out_masks[1] != 0x00 && (inv & out_masks[1]) == out_masks[1]) new_conditions |= (1U << 1);
-	            if (out_masks[2] != 0x00 && (inv & out_masks[2]) == out_masks[2]) new_conditions |= (1U << 2);
-	            if (out_masks[3] != 0x00 && (inv & out_masks[3]) == out_masks[3]) new_conditions |= (1U << 3);
+                /*
+                 * Active-low inputs:
+                 * pressed = 1
+                 */
+                uint8_t inv = (uint8_t)(~stable & 0x0FU);
 
-	            /* Обновляем биты EVT_OUT1..EVT_OUT4 в ctrlEventGroup */
-	            EventBits_t current = xEventGroupGetBits(ctrlEventGroup);
-	            EventBits_t mask_out = EVT_OUT1 | EVT_OUT2 | EVT_OUT3 | EVT_OUT4;
-	            EventBits_t new_bits = ((new_conditions & 0x01U) ? EVT_OUT1 : 0U) |
-	                                   ((new_conditions & 0x02U) ? EVT_OUT2 : 0U) |
-	                                   ((new_conditions & 0x04U) ? EVT_OUT3 : 0U) |
-	                                   ((new_conditions & 0x08U) ? EVT_OUT4 : 0U);
+                /*
+                 * Calculate new output states
+                 */
+                uint8_t new_conditions = 0x00U;
 
-	            /* Сбрасываем все 4 бита, затем устанавливаем нужные */
-	            xEventGroupClearBits(ctrlEventGroup, mask_out);
-	            if (new_bits)
-	              xEventGroupSetBits(ctrlEventGroup, new_bits);
+                if ((out_masks[0] != 0x00U) && ((inv & out_masks[0]) == out_masks[0]))
+                {
+                    new_conditions |= (1U << 0);
+                }
 
-	            /* Выставляем флаги изменения только для изменившихся выходов */
-	            uint8_t changed = new_conditions ^ prev_conditions;
-	            if (changed & (1U << 0)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_1);
-	            if (changed & (1U << 1)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_2);
-	            if (changed & (1U << 2)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_3);
-	            if (changed & (1U << 3)) xEventGroupSetBits(ctrlEventGroup, EVT_INPUT_CHANGED_4);
+                if ((out_masks[1] != 0x00U) && ((inv & out_masks[1]) == out_masks[1]))
+                {
+                    new_conditions |= (1U << 1);
+                }
 
-	            prev_conditions = new_conditions;
-	        }
-	    }
+                if ((out_masks[2] != 0x00U) && ((inv & out_masks[2]) == out_masks[2]))
+                {
+                    new_conditions |= (1U << 2);
+                }
 
-	    osDelay(10);
-	}
-  /* USER CODE END StartInputTask */
+                if ((out_masks[3] != 0x00U) && ((inv & out_masks[3]) == out_masks[3]))
+                {
+                    new_conditions |= (1U << 3);
+                }
+
+                /*
+                 * Atomic state update
+                 */
+                g_output_state = new_conditions;
+
+                /*
+                 * Detect changes
+                 */
+                uint8_t changed = (uint8_t)(new_conditions ^ prev_conditions);
+
+                /*
+                 * Notify only changed outputs
+                 */
+                if (changed & (1U << 0))
+                {
+                    xEventGroupSetBits(ctrlEventGroup, EVT_OUT1_CHANGED);
+                }
+
+                if (changed & (1U << 1))
+                {
+                    xEventGroupSetBits(ctrlEventGroup, EVT_OUT2_CHANGED);
+                }
+
+                if (changed & (1U << 2))
+                {
+                    xEventGroupSetBits(ctrlEventGroup, EVT_OUT3_CHANGED);
+                }
+
+                if (changed & (1U << 3))
+                {
+                    xEventGroupSetBits(ctrlEventGroup, EVT_OUT4_CHANGED);
+                }
+
+                prev_conditions = new_conditions;
+            }
+        }
+
+        osDelay(10);
+    }
 }
+/* USER CODE END Header_StartInputTask */
+
 
 /**
   * @brief  Period elapsed callback in non blocking mode
