@@ -62,10 +62,10 @@ osThreadId out4TaskHandle;
 EventGroupHandle_t ctrlEventGroup;
 static volatile uint8_t out_masks[OUT_COUNT] =
 {
-    0x08,
-    0x04,
-    0x02,
-    0x01
+    0x08, //1000
+    0x04, //0100
+    0x02, //0010
+    0x01  //0001
 };
 
 /*
@@ -485,6 +485,7 @@ void vApplicationStackOverflowHook(
     {
     }
 }
+
 /* USER CODE END 4 */
 
 void StartOut1Task(void const * argument)
@@ -530,27 +531,29 @@ void StartUartTask(void const * argument)
   {
     if (HAL_UART_Receive(&huart1, &ch, 1, 0) == HAL_OK)
     {
-      if (ch == '\r' || ch == '\n')
-      {
-        if (rx_pos > 0)
-        {
-          rx_line[rx_pos] = '\0';
-          ProcessCommand(rx_line);
-          rx_pos = 0;
-        }
-      }
-      else
-      {
-        if (rx_pos < sizeof(rx_line) - 1)
-        {
-          rx_line[rx_pos++] = (char)ch;
-        }
-        else
-        {
-          rx_pos = 0;
-          UartSend("ERR: line too long\r\n");
-        }
-      }
+		if (ch == '\r' || ch == '\n')
+		{
+			if (rx_pos == 0)
+			{
+				continue;
+			}
+
+			rx_line[rx_pos] = '\0';
+			ProcessCommand(rx_line);
+			rx_pos = 0;
+		}
+		else
+			{
+			if (rx_pos < sizeof(rx_line) - 1)
+				{
+				  rx_line[rx_pos++] = (char)ch;
+				}
+			else
+				{
+				  rx_pos = 0;
+				  UartSend("ERR: line too long\r\n");
+				}
+		}
     }
     osDelay(2);
   }
@@ -589,7 +592,7 @@ void StartInputTask(void const * argument)
         else
         {
             debounce_ctr++;
-
+            /* 20 ms debounce */
             if (debounce_ctr >= 2)
             {
                 stable = curr;
